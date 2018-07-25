@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class User{
 	private String name;
@@ -12,7 +11,7 @@ public class User{
 	public User(String name, String username, String password, int userID) {
 		this.name = name;
 		this.username = username;
-		setPassword(password);
+		this.password = password;
 		this.userID = userID;
 		accounts = new ArrayList<Account>();
 	}
@@ -22,14 +21,17 @@ public class User{
 		this.password = newPassword;
 	}
 	
+	//returns the User's password
 	public String getPassword() {
 		return password;
 	}
 	
+	//sets a new name
 	public void setName(String newName) {
 		this.name = newName;
 	}
 	
+	//returns the User's name
 	public String getName() {
 		return name;
 	}
@@ -38,7 +40,8 @@ public class User{
 	public String getUsername() {
 		return username;
 	}
-	
+
+	//spends money from one of the User's accounts
 	public void spend(int accID, double amount, String type) {
 		int accIndex = getAccountIndex(accID);
 		Account account = accounts.get(accIndex);
@@ -51,6 +54,7 @@ public class User{
 		
 	}
 	
+	//adds a Checkings/Savings account if the User doesn't already have 5 accounts
 	public void addAccount(Account newAccount) {
 		if (accounts.size() < 5) {
 			accounts.add(newAccount);
@@ -62,7 +66,7 @@ public class User{
 		}
 	}
 	
-	//search if the account is under the user
+	//search if the account is under the User
 	public boolean accountExists(int accountID) {
 		for (int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).getAccID() == accountID) {
@@ -72,13 +76,13 @@ public class User{
 		return false;
 	}
 	
-	//removes Checkings/Savings account
+	//removes a Checkings/Savings account
 	public void removeAccount(int accountID) {
 		int index = getAccountIndex(accountID);
 		accounts.remove(index);
 	}
 	
-	//returns index of the account with given ID
+	//returns the index of the account in the arraylist that has the given account ID
 	public int getAccountIndex(int accID) {
 		int index = 0;
 		for (int i = 0; i < accounts.size(); i++) {
@@ -89,7 +93,7 @@ public class User{
 		return index;
 	}
 	
-	//deposits money to an account
+	//deposits an amount of money to the account that has the given account ID
 	public void depositToAccount(int accountID, double amount) {
 		int index = 0;
 		for (int i = 0; i < accounts.size(); i++) {
@@ -101,6 +105,7 @@ public class User{
 		account.deposit(amount);
 	}
 	
+	//prints all of the User's Checkings/Savings account information
 	public void printAllAccountsInfo() {
 		if (accounts.size() == 0) {
 			System.out.println("You do not have any accounts.");
