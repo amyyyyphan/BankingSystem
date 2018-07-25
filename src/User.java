@@ -3,21 +3,21 @@ import java.util.Scanner;
 
 public class User{
 	private String name;
+	private String username;
 	private String password;
 	private int userID;
 	private ArrayList<Account> accounts;
 	
-	public User(String name, String password, int userID) {
+	//constructor
+	public User(String name, String username, String password, int userID) {
 		this.name = name;
+		this.username = username;
 		setPassword(password);
 		this.userID = userID;
 		accounts = new ArrayList<Account>();
 	}
 	
-	public int getUserID() {
-		return userID;
-	}
-	
+	//sets a new password
 	public void setPassword(String newPassword) {
 		this.password = newPassword;
 	}
@@ -34,7 +34,14 @@ public class User{
 		return name;
 	}
 	
-	//spend method
+	//returns the User's username
+	public String getUsername() {
+		return username;
+	}
+	
+	public void spend(int accID, double amount, String type) {
+		
+	}
 	
 	public void addAccount(Account newAccount) {
 		if (accounts.size() < 5) {
@@ -44,4 +51,38 @@ public class User{
 			System.out.println("You can only have five accounts.");
 		}
 	}
+	
+	//search if the account is under the user
+	public boolean accountExists(int accountID) {
+		for (int i = 0; i < accounts.size(); i++) {
+			if (accounts.get(i).getAccID() == accountID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//removes Checkings/Savings account
+	public void removeAccount(int accountID) {
+		int index = 0;
+		for (int i = 0; i < accounts.size(); i++) {
+			if (accounts.get(i).getAccID() == accountID) {
+				index = i;
+			}
+		}
+		accounts.remove(index);
+	}
+	
+	//deposits money to an account
+	public void depositToAccount(int accountID, double amount) {
+		int index = 0;
+		for (int i = 0; i < accounts.size(); i++) {
+			if (accounts.get(i).getAccID() == accountID) {
+				index = i;
+			}
+		}
+		Account account = accounts.get(index);
+		account.deposit(amount);
+	}
+	
 }
