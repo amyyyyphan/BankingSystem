@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.time.LocalTime;
+
 public class Account {
 	
 	private int accID;
@@ -19,16 +21,17 @@ public class Account {
 		return balance;
 	}
 	
-	public void deposit(double amount) {
+	public void deposit(double amount, String type) {
 		balance += amount;
+		LocalTime time = java.time.LocalTime.now();
 		if (transactions.size() < 10) {
-			Transaction newTransaction = new Transaction(transactionCount, amount, "Deposit");
+			Transaction newTransaction = new Transaction(transactionCount, amount, type, time);
 			transactionCount++;
 			transactions.add(newTransaction);
 		}
 		else {
 			transactions.remove(0);
-			Transaction newTransaction = new Transaction(transactionCount, amount, "Deposit");
+			Transaction newTransaction = new Transaction(transactionCount, amount, type, time);
 			transactionCount++;
 			transactions.add(newTransaction);
 		}
@@ -36,14 +39,15 @@ public class Account {
 	
 	public void withdraw(double amount, String type) {
 		balance -= amount;
+		LocalTime time = java.time.LocalTime.now();
 		if (transactions.size() < 10) {
-			Transaction newTransaction = new Transaction(transactionCount, amount, type);
+			Transaction newTransaction = new Transaction(transactionCount, -amount, type, time);
 			transactionCount++;
 			transactions.add(newTransaction);
 		}
 		else {
 			transactions.remove(0);
-			Transaction newTransaction = new Transaction(transactionCount, amount, type);
+			Transaction newTransaction = new Transaction(transactionCount, -amount, type, time);
 			transactionCount++;
 			transactions.add(newTransaction);
 		}

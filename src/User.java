@@ -67,7 +67,7 @@ public class User{
 	}
 	
 	//search if the account is under the User
-	public boolean accountExists(int accountID) {
+	public boolean accountExistsUnderUser(int accountID) {
 		for (int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).getAccID() == accountID) {
 				return true;
@@ -102,7 +102,7 @@ public class User{
 			}
 		}
 		Account account = accounts.get(index);
-		account.deposit(amount);
+		account.deposit(amount, "Deposit");
 	}
 	
 	//prints all of the User's Checkings/Savings account information
@@ -119,4 +119,9 @@ public class User{
 		}
 	}
 	
+	public void receive(int accID, double amount) {
+		int index = getAccountIndex(accID);
+		Account account = accounts.get(index);
+		account.deposit(amount, "Transfer");
+	}
 }
