@@ -40,12 +40,22 @@ public class User{
 	}
 	
 	public void spend(int accID, double amount, String type) {
+		int accIndex = getAccountIndex(accID);
+		Account account = accounts.get(accIndex);
+		if (amount > account.getBalance()) {
+			System.out.println("You do not have enough money.");
+		}
+		else {
+			account.withdraw(amount, type);
+		}
 		
 	}
 	
 	public void addAccount(Account newAccount) {
 		if (accounts.size() < 5) {
 			accounts.add(newAccount);
+			System.out.println(newAccount.getAccType() + " account successfully created.");
+
 		}
 		else {
 			System.out.println("You can only have five accounts.");
@@ -64,13 +74,19 @@ public class User{
 	
 	//removes Checkings/Savings account
 	public void removeAccount(int accountID) {
+		int index = getAccountIndex(accountID);
+		accounts.remove(index);
+	}
+	
+	//returns index of the account with given ID
+	public int getAccountIndex(int accID) {
 		int index = 0;
 		for (int i = 0; i < accounts.size(); i++) {
-			if (accounts.get(i).getAccID() == accountID) {
+			if (accounts.get(i).getAccID() == accID) {
 				index = i;
 			}
 		}
-		accounts.remove(index);
+		return index;
 	}
 	
 	//deposits money to an account

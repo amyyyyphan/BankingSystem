@@ -14,6 +14,11 @@ public class Account {
 		this.transactions = new ArrayList<Transaction>();
 		transactionCount = 0;
 	}
+	
+	public double getBalance() {
+		return balance;
+	}
+	
 	public void deposit(double amount) {
 		balance += amount;
 		if (transactions.size() < 10) {
@@ -29,7 +34,26 @@ public class Account {
 		}
 	}
 	
+	public void withdraw(double amount, String type) {
+		balance -= amount;
+		if (transactions.size() < 10) {
+			Transaction newTransaction = new Transaction(transactionCount, amount, type);
+			transactionCount++;
+			transactions.add(newTransaction);
+		}
+		else {
+			transactions.remove(0);
+			Transaction newTransaction = new Transaction(transactionCount, amount, type);
+			transactionCount++;
+			transactions.add(newTransaction);
+		}
+	}
+	
 	public int getAccID() {
 		return accID;
+	}
+	
+	public String getAccType() {
+		return accType;
 	}
 }

@@ -80,7 +80,7 @@ public class Bank {
 		System.out.print("Enter your password: ");
 		String password = scan.nextLine();
 		for (int i = 0; i < users.size(); i++) {
-			if (users.get(i).getUsername() == username) {
+			if (users.get(i).getUsername().equals(username)) {
 				if (password.equals(users.get(i).getPassword())) {
 					showHomepage(users.get(i));
 				}
@@ -129,7 +129,7 @@ public class Bank {
 			showDepositPage(user);
 		}
 		else if (choice.equals("5")) {
-			
+			showWithdrawPage(user);
 		}
 		else if (choice.equals("6")) {
 			
@@ -178,11 +178,10 @@ public class Bank {
 		System.out.println("The account ID is: " + accountCount);
 		accountCount++;
 		user.addAccount(account);
-		System.out.println(accountType + " account successfully created.");
 		showHomepage(user);
 	}
 	
-	//delete a Checkings/Savings account
+	//show Delete a Checkings/Savings Account page
 	public void deleteAnAccount(User user) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
@@ -217,7 +216,7 @@ public class Bank {
 		System.out.println("==============================================");
 		System.out.println("                   Deposit                    ");
 		System.out.println("==============================================");
-		System.out.println("Enter the ID of the account you would like to deposit money to: ");
+		System.out.print("Enter the ID of the account you would like to deposit money to: ");
 		//if the account ID entered is not valid, show deposit page
 		if (!scan.hasNextInt()) {
 			System.out.println("Invalid Account ID.");
@@ -241,6 +240,66 @@ public class Bank {
 		showHomepage(user);
 	}
 	
+	//show Withdraw page
+	public void showWithdrawPage(User user) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("");
+		System.out.println("==============================================");
+		System.out.println("                   Withdraw                   ");
+		System.out.println("==============================================");
+		System.out.print("Enter the ID of the account you would like to withdraw money from: ");
+		if (!scan.hasNextInt()) {
+			System.out.println("Invalid Account ID.");
+			showWithdrawPage(user);
+		}
+		int accID = scan.nextInt();
+		if (user.accountExists(accID)) {
+			System.out.print("Enter the amount you would like to withdraw: ");
+			if (!scan.hasNextDouble()) {
+				System.out.println("Invalid amount.");
+				showDepositPage(user);
+			}
+			double amount = scan.nextDouble();
+			System.out.println("What type of transaction is this?");
+			System.out.println("1. Food");
+			System.out.println("2. Gas");
+			System.out.println("3. Bills");
+			System.out.println("4. Clothes");
+			System.out.println("5. Withdrawal");
+			System.out.println("6. Transfer");
+			System.out.print("Choose an option: ");
+			String choice = scan.next();
+			if (choice.equals("1")) {
+				choice = "Food";
+			}
+			else if (choice.equals("2")) {
+				choice = "Gas";
+			}
+			else if (choice.equals("3")) {
+				choice = "Bills";
+			}
+			else if (choice.equals("4")) {
+				choice = "Clothes";
+			}
+			else if (choice.equals("5")) {
+				choice = "Withdrawal";
+			}
+			else if (choice.equals("6")) {
+				choice = "Transfer";
+			}
+			else {
+				System.out.println("Please choose an option between 1 and 6.");
+				showWithdrawPage(user);
+			}
+			user.spend(accID, amount, choice);
+		}
+		else {
+			System.out.println("Account does not exist.");
+		}
+		showHomepage(user);
+	}
+	
+	//checks if username already exists
 	public boolean usernameAlreadyExists(String username) {
 		boolean usernameExist = false;
 		for (int i = 0; i < users.size(); i++) {
