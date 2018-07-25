@@ -135,7 +135,7 @@ public class Bank {
 			
 		}
 		else if (choice.equals("7")) {
-			
+			showAccountsPage(user);
 		}
 		else if (choice.equals("8")) {
 			
@@ -150,6 +150,7 @@ public class Bank {
 		}
 		else {
 			System.out.println("Please choose an option between 1 and 10.");
+			showHomepage(user);
 		}
 	}
 		
@@ -296,6 +297,17 @@ public class Bank {
 		else {
 			System.out.println("Account does not exist.");
 		}
+		showHomepage(user);
+	}
+	
+	//show Accounts page
+	public void showAccountsPage(User user) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("");
+		System.out.println("==============================================");
+		System.out.println("                   Accounts                   ");
+		System.out.println("==============================================");
+		user.printAllAccountsInfo();
 		showHomepage(user);
 	}
 	

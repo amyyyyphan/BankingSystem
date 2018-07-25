@@ -101,4 +101,17 @@ public class User{
 		account.deposit(amount);
 	}
 	
+	public void printAllAccountsInfo() {
+		if (accounts.size() == 0) {
+			System.out.println("You do not have any accounts.");
+		}
+		for (int i = 0; i < accounts.size(); i++) {
+			Account account = accounts.get(i);
+			System.out.println("Account ID: " + account.getAccID());
+			System.out.println("    Balance: " + account.getBalance());
+			System.out.println("    Type: " + account.getAccType());
+			System.out.println("");
+		}
+	}
+	
 }
