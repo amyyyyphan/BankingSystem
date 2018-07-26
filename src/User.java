@@ -26,11 +26,6 @@ public class User{
 		return password;
 	}
 	
-	//sets a new name
-	public void setName(String newName) {
-		this.name = newName;
-	}
-	
 	//returns the User's name
 	public String getName() {
 		return name;
@@ -41,7 +36,7 @@ public class User{
 		return username;
 	}
 
-	//spends money from one of the User's accounts
+	//spends money from the User's account with the given ID
 	public void spend(int accID, double amount, String type) {
 		int accIndex = getAccountIndex(accID);
 		Account account = accounts.get(accIndex);
@@ -50,6 +45,9 @@ public class User{
 		}
 		else {
 			account.withdraw(amount, type);
+			if (type.equals("Transfer")) {
+				System.out.println("Transfer completed.");
+			}
 		}
 		
 	}
@@ -59,10 +57,6 @@ public class User{
 		if (accounts.size() < 5) {
 			accounts.add(newAccount);
 			System.out.println(newAccount.getAccType() + " account successfully created.");
-
-		}
-		else {
-			System.out.println("You can only have five accounts.");
 		}
 	}
 	
@@ -83,7 +77,7 @@ public class User{
 	}
 	
 	//returns the index of the account in the arraylist that has the given account ID
-	public int getAccountIndex(int accID) {
+	private int getAccountIndex(int accID) {
 		int index = 0;
 		for (int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).getAccID() == accID) {
@@ -93,14 +87,9 @@ public class User{
 		return index;
 	}
 	
-	//deposits an amount of money to the account that has the given account ID
+	//deposits an amount of money to the Account with the given ID
 	public void depositToAccount(int accountID, double amount) {
-		int index = 0;
-		for (int i = 0; i < accounts.size(); i++) {
-			if (accounts.get(i).getAccID() == accountID) {
-				index = i;
-			}
-		}
+		int index = getAccountIndex(accountID);
 		Account account = accounts.get(index);
 		account.deposit(amount, "Deposit");
 	}
@@ -113,20 +102,45 @@ public class User{
 		for (int i = 0; i < accounts.size(); i++) {
 			Account account = accounts.get(i);
 			System.out.println("Account ID: " + account.getAccID());
-			System.out.println("    Balance: " + account.getBalance());
-			System.out.println("    Type: " + account.getAccType());
+			System.out.println("Balance: " + account.getBalance());
+			System.out.println("Type: " + account.getAccType());
 			System.out.println("");
 		}
 	}
 	
+	//prints the information of the Account with the given ID
 	public void printAccountInfo(int accID) {
 		int accIndex = getAccountIndex(accID);
 		Account account = accounts.get(accIndex);
+		account.printTransactionLog();
 	}
 	
+	//receives the money that was transfered to the Account with the given ID
 	public void receive(int accID, double amount) {
 		int index = getAccountIndex(accID);
 		Account account = accounts.get(index);
 		account.deposit(amount, "Transfer");
+	}
+	
+	//checks if the User already has 5 accounts
+	public boolean hasFiveAccounts() {
+		if (accounts.size() == 5) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	//checks if the User has enough money in the account with the given ID for the transfer
+	public boolean hasEnough(int accID, double amount) {
+		int index = getAccountIndex(accID);
+		Account account = accounts.get(index);
+		if (account.getBalance() >= amount) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

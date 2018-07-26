@@ -1,6 +1,6 @@
 import java.time.LocalTime;
 
-public class Transaction implements Comparable<LocalTime>{
+public class Transaction implements Comparable{
 	private int transactionID;
 	private double amount;
 	private String type;
@@ -30,7 +30,8 @@ public class Transaction implements Comparable<LocalTime>{
 	}
 	
 	@Override
-	public int compareTo(LocalTime other) {
+	public int compareTo(Object o) {
+		LocalTime other = (LocalTime)o;
 		if (this.time.isAfter(other)) {
 			return 1;
 		}
@@ -42,4 +43,8 @@ public class Transaction implements Comparable<LocalTime>{
 		}
 	}
 	
+	//return the transaction ID
+	public int getTransactionID() {
+		return transactionID;
+	}
 }

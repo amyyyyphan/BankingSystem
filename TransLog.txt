@@ -1,0 +1,11 @@
+
+Account ID: 1
+Balance: 8.0
+Type: Savings
+
+                 Transactions                 
+                ==============                
+0  01:13:37.980  Deposit  10.0
+1  01:15:33.944  Transfer  -2.0
+2  01:16:49.480  Transfer  -0.0
+3  01:16:49.480  Transfer  0.0

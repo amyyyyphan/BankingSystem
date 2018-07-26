@@ -25,7 +25,7 @@ public class Bank {
 		System.out.print("Choose an option: ");
 		String choice = scan.next();
 		if (choice.equals("1")) {
-			signUp();
+			showSignUpPage();
 		}
 		else if (choice.equals("2")) {
 			login();
@@ -37,7 +37,7 @@ public class Bank {
 	}
 	
 	//shows sign up page
-	public void signUp() {
+	public void showSignUpPage() {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
 		System.out.println("==============================================");
@@ -45,37 +45,65 @@ public class Bank {
 		System.out.println("==============================================");
 		System.out.print("Enter your name: ");
 		String name = scan.nextLine();
-		System.out.print("Choose a username: ");
-		String username = scan.nextLine();
-		if (username.equals("")) {
-			System.out.println("Please enter a valid username.");
-			signUp();
-		}
-		else if (username.contains(" ")) {
-			System.out.println("Username cannot contain spaces.");
-			signUp();
-		}
-		else if (usernameAlreadyExists(username)) {
-			System.out.println("Username is already taken.");
-			signUp();
+		if (!validateName(name)) {
+			System.out.println("Please enter a valid name.");
+			showSignUpPage();
 		}
 		else {
-			System.out.print("Choose a password: ");
-			String password = scan.nextLine();
-			if (password.equals("")) {
-				System.out.println("Please enter a valid password.");
-				signUp();
+			System.out.print("Choose a username: ");
+			String username = scan.nextLine();
+			if (username.equals("")) {
+				System.out.println("Please enter a valid username.");
+				showSignUpPage();
+			}
+			else if (username.contains(" ")) {
+				System.out.println("Username cannot contain spaces.");
+				showSignUpPage();
+			}
+			else if (usernameAlreadyExists(username)) {
+				System.out.println("Username is already taken.");
+				showSignUpPage();
 			}
 			else {
-				User user = new User(name, username, password, userCount);
-				users.add(user);
-				userCount++;
-				System.out.println("Bank account successfully created.");
-				showHomepage(user);
-				
+				System.out.print("Choose a password: ");
+				String password = scan.nextLine();
+				if (password.equals("")) {
+					System.out.println("Please enter a valid password.");
+					showSignUpPage();
+				}
+				else {
+					User user = new User(name, username, password, userCount);
+					users.add(user);
+					userCount++;
+					System.out.println("Bank account successfully created.");
+					showHomepage(user);
+					
+				}
 			}
-			
 		}
+	}
+	
+	//checks if name is valid
+	private boolean validateName(String name) {
+		if (name.equals("")) {
+			return false;
+		}	
+		//returns false if the name contains a digit
+		for (int i = 0; i < name.length(); i++) {
+			if (name.substring(i, i + 1).matches("\\d")) {
+				return false;
+			}
+		}
+		
+		//name is valid if it contains an alphabetic character
+		boolean isValid = false;
+		for (int j = 0; j < name.length(); j++) {
+			if(name.substring(j, j + 1).matches("\\p{Alpha}")){
+				isValid = true;
+				break;
+			}
+		}
+		return isValid;
 	}
 	
 	//shows login page
@@ -87,29 +115,36 @@ public class Bank {
 		System.out.println("==============================================");
 		System.out.print("Enter your username: ");
 		String username = scan.nextLine();
-		if (username.contains(" ")) {
+		if (username.equals("")) {
+			System.out.println("Please enter a valid username.");
+		}
+		else if (username.contains(" ")) {
 			System.out.println("Invalid username.");
 			login();
 		}
 		else{
 			System.out.print("Enter your password: ");
 			String password = scan.nextLine();
-			for (int i = 0; i < users.size(); i++) {
-				if (users.get(i).getUsername().equals(username)) {
-					if (password.equals(users.get(i).getPassword())) {
-						showHomepage(users.get(i));
+			if (password.equals("")) {
+				System.out.println("Please enter a valid password.");
+			}
+			else {
+				for (int i = 0; i < users.size(); i++) {
+					if (users.get(i).getUsername().equals(username)) {
+						if (password.equals(users.get(i).getPassword())) {
+							showHomepage(users.get(i));
+						}
 					}
 				}
+				System.out.println("Username or password is incorrect.");
+				login();
 			}
-			System.out.println("Username or password is incorrect.");
-			login();
 		}
 	}
 	
 	//shows Homepage
 	public void showHomepage(User user) {
 		Scanner scan = new Scanner(System.in);
-		
 		System.out.println("");
 		System.out.println("==============================================");
 		System.out.println("                   Homepage                   ");
@@ -152,12 +187,13 @@ public class Bank {
 			break;
 		case "8":
 			showDeleteUserPage(user);
+			break;
 		case "9":
 			System.out.println("You have logged out.");
 			showLoginScreen();
 			break;
 		case "10":
-			System.out.println("Exitted program");
+			System.out.println("Exited program");
 			System.exit(0);
 			break;
 		default:
@@ -188,14 +224,18 @@ public class Bank {
 			System.out.println("Please choose an option between 1 and 2.");
 			showCreateAnAccountPage(user);
 		}
-
 	}
 	
 	private void createAccount(String type, User user) {
 		Account account = new Account(accountCount, type);
-		System.out.println("The account ID is: " + accountCount);
-		accountCount++;
-		user.addAccount(account);
+		if (!user.hasFiveAccounts()) {
+			System.out.println("The account ID is: " + accountCount);
+			accountCount++;
+			user.addAccount(account);
+		}
+		else {
+			System.out.println("You can only have five accounts.");
+		}
 		showHomepage(user);
 	}
 	
@@ -215,7 +255,6 @@ public class Bank {
 		if (user.accountExistsUnderUser(accID)) {
 			user.removeAccount(accID);
 			System.out.println("Account successfully deleted.");
-			//????
 		}
 		else {
 			System.out.println("Account does not exist.");
@@ -229,20 +268,24 @@ public class Bank {
 		System.out.println("==============================================");
 		System.out.println("                   Transfer                   ");
 		System.out.println("==============================================");
-		System.out.println("Enter the amount you would like to transfer: ");
+		System.out.print("Enter the amount you would like to transfer: ");
 		if (!scan.hasNextDouble()) {
 			System.out.println("Invalid amount.");
 			showTransferToAnotherAccountPage(user);
 		}
 		double amount = scan.nextDouble();
-		System.out.println("Enter the ID of the account you would like to transfer money to: ");
+		if (amount < 0) {
+			System.out.println("Invalid amount.");
+			showTransferToAnotherAccountPage(user);
+		}
+		System.out.print("Enter the ID of the account you would like to transfer money to: ");
 		if (!scan.hasNextInt()) {
 			System.out.println("Invalid Account ID.");
 			showTransferToAnotherAccountPage(user);
 		}
 		int recipientAccID = scan.nextInt();
 		if (accountExists(recipientAccID)) {
-			System.out.println("Enter the ID of the account you would like to withdraw the money from: ");
+			System.out.print("Enter the ID of the account you would like to withdraw the money from: ");
 			if (!scan.hasNextInt()) {
 				System.out.println("Invaid Account ID.");
 				showTransferToAnotherAccountPage(user);
@@ -250,13 +293,17 @@ public class Bank {
 			int senderAccID = scan.nextInt();
 			if (user.accountExistsUnderUser(senderAccID)) {
 				user.spend(senderAccID, amount, "Transfer");
-				User recipient = findRecipient(recipientAccID);
-				recipient.receive(recipientAccID, amount);
-				System.out.println("Transfer completed.");
+				if (user.hasEnough(senderAccID, amount)) {
+					User recipient = findRecipient(recipientAccID);
+					recipient.receive(recipientAccID, amount);
+				}
 			}
 			else {
 				System.out.println("Account does not exist.");
 			}
+		}
+		else {
+			System.out.println("Account does not exist.");
 		}
 		showHomepage(user);
 	}
@@ -283,7 +330,13 @@ public class Bank {
 			}
 			else {
 				double amount = scan.nextDouble();
-				user.depositToAccount(accID, amount);
+				if (amount < 0) {
+					System.out.println("Invalid amount.");
+					showDepositPage(user);
+				}
+				else{
+					user.depositToAccount(accID, amount);
+				}
 			}
 		}
 		else {
@@ -312,6 +365,10 @@ public class Bank {
 				showDepositPage(user);
 			}
 			double amount = scan.nextDouble();
+			if (amount < 0) {
+				System.out.println("Invalid amount.");
+				showDepositPage(user);
+			}
 			System.out.println("What type of transaction is this?");
 			System.out.println("1. Food");
 			System.out.println("2. Gas");
@@ -320,7 +377,7 @@ public class Bank {
 			System.out.println("5. Withdrawal");
 			System.out.println("6. Transfer");
 			System.out.print("Choose an option: ");
-			String choice = scan.nextLine();
+			String choice = scan.next();
 			if (choice.equals("1")) {
 				choice = "Food";
 			}
@@ -351,6 +408,7 @@ public class Bank {
 		showHomepage(user);
 	}
 	
+	//show Account page
 	public void showAccountPage(User user) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
@@ -362,18 +420,16 @@ public class Bank {
 			System.out.println("Invalid Account ID.");
 			showAccountPage(user);
 		}
-		else if(scan.hasNextLine()) {
-			if (scan.nextLine().contains(" ")) {
-				System.out.println("Invalid Account ID.");
-				showAccountPage(user);
-			}
-		}
 		else {
 			int accID = scan.nextInt();
 			if (user.accountExistsUnderUser(accID)) {
 				user.printAccountInfo(accID);
 			}
+			else {
+				System.out.println("Account does not exist.");
+			}
 		}
+		showHomepage(user);
 	}
 	
 	//show Accounts page
@@ -387,6 +443,7 @@ public class Bank {
 		showHomepage(user);
 	}
 	
+	//show Delete User page
 	public void showDeleteUserPage(User user) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
@@ -406,6 +463,7 @@ public class Bank {
 		}
 	}
 	
+	//finds the index of the User in the ArrayList
 	private int findUserIndex(User user) {
 		int index = 0;
 		for (int i = 0; i < users.size(); i++) {
@@ -432,6 +490,7 @@ public class Bank {
 		return usernameExist;
 	}
 	
+	//checks if a Checkings/Savings account with the given ID exists
 	public boolean accountExists(int accID) {
 		for (int i = 0; i < users.size(); i++) {
 			User user = users.get(i);
@@ -442,6 +501,7 @@ public class Bank {
 		return false;
 	}
 	
+	//finds the User that has a Checkings/Savings account with the given ID
 	public User findRecipient(int accID) {
 		User recipient = null;
 		for (int i = 0; i < users.size(); i++) {
