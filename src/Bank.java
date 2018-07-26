@@ -5,7 +5,7 @@ public class Bank {
 	private int userCount;
 	private int accountCount;
 	
-	
+	//constructor
 	public Bank() {
 		this.users = new ArrayList<User>();
 		this.userCount = 1;
@@ -423,7 +423,51 @@ public class Bank {
 		else {
 			int accID = scan.nextInt();
 			if (user.accountExistsUnderUser(accID)) {
-				user.printAccountInfo(accID);
+				System.out.println("1. See all transactions");
+				System.out.println("2. See transactions of a certain type");
+				System.out.print("Choose an option: ");
+				String choice = scan.next();
+				if (choice.equals("1")) {
+					user.printAccountInfo(accID);
+				}
+				else if (choice.equals("2")) {
+					System.out.println("1. Food");
+					System.out.println("2. Gas");
+					System.out.println("3. Bills");
+					System.out.println("4. Clothes");
+					System.out.println("5. Deposit");
+					System.out.println("6. Withdrawal");
+					System.out.println("7. Transfer");
+					System.out.print("Choose a type: ");
+					String transactionType = scan.next();
+					if (transactionType.equals("1")) {
+						transactionType = "Food";
+					}
+					else if (transactionType.equals("2")) {
+						transactionType = "Gas";
+					}
+					else if (transactionType.equals("3")) {
+						transactionType = "Bills";
+					}
+					else if (transactionType.equals("4")) {
+						transactionType = "Clothes";
+					}
+					else if (transactionType.equals("5")) {
+						transactionType = "Deposit";
+					}
+					else if (transactionType.equals("6")) {
+						transactionType = "Withdrawal";
+					}
+					else if (transactionType.equals("7")) {
+						transactionType = "Transfer";
+					}
+					else {
+						System.out.println("Please choose an option between 1 and 7.");
+						showAccountPage(user);
+					}
+					user.printAccountInfo(accID, transactionType);
+				}
+				
 			}
 			else {
 				System.out.println("Account does not exist.");

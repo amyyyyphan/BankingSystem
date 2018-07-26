@@ -108,11 +108,18 @@ public class User{
 		}
 	}
 	
-	//prints the information of the Account with the given ID
+	//prints the information and transactions of the Account with the given ID
 	public void printAccountInfo(int accID) {
 		int accIndex = getAccountIndex(accID);
 		Account account = accounts.get(accIndex);
 		account.printTransactionLog();
+	}
+	
+	//prints the information and transactions of a certain type of the Account with the given ID
+	public void printAccountInfo(int accID, String type) {
+		int accIndex = getAccountIndex(accID);
+		Account account = accounts.get(accIndex);
+		account.printTransactionLog(type);
 	}
 	
 	//receives the money that was transfered to the Account with the given ID

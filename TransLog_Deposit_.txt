@@ -6,7 +6,4 @@ Type: Savings
                  Transactions                 
                 ==============                
 0  01:59:48.359  Deposit  10.0
-1  02:00:18.022  Food  -1.0
-2  02:00:33.873  Gas  -2.0
 3  02:00:43.535  Deposit  15.0
-4  02:00:56.767  Clothes  -5.0

@@ -104,6 +104,54 @@ public class Account{
 		}
 	}
 	
+	public void printTransactionLog(String type) {
+		System.out.println("");
+		System.out.println("Account ID: " + getAccID());
+		System.out.println("Balance: " + getBalance());
+		System.out.println("Type: " + getAccType());
+		System.out.println("");
+		System.out.println("                 Transactions                 ");
+		System.out.println("                ==============                ");
+		if (transactions.size() == 0) {
+			System.out.println("No tranactions.");
+		}
+		for (int i = 0; i < transactions.size(); i++) {
+			Transaction transaction = transactions.get(i);
+			if (transaction.getType().equals(type)) {
+				System.out.println(transaction.getTransactionID() + "  " + transaction.getTime() + "  " + transaction.getType() + "  " + transaction.getAmount());
+			}
+		}
+		
+		try {
+			String fileName = "TransLog_" + type + "_.txt";
+			File file = new File(fileName);
+			if (!file.exists()){
+				file.createNewFile();
+			}
+			PrintWriter writer = new PrintWriter(file);
+			writer.println("");
+			writer.println("Account ID: " + getAccID());
+			writer.println("Balance: " + getBalance());
+			writer.println("Type: " + getAccType());
+			writer.println("");
+			writer.println("                 Transactions                 ");
+			writer.println("                ==============                ");
+			if (transactions.size() == 0) {
+				writer.println("No transactions.");
+			}
+			for (int i = 0; i < transactions.size(); i++) {
+				Transaction transaction = transactions.get(i);
+				if (transaction.getType().equals(type)) {
+					writer.println(transaction.getTransactionID() + "  " + transaction.getTime() + "  " + transaction.getType() + "  " + transaction.getAmount());
+				}
+			}
+			writer.close();
+		}
+		catch (IOException e) {
+			e.getStackTrace();
+		}
+	}
+	
 	//returns the Account ID
 	public int getAccID() {
 		return accID;
