@@ -150,7 +150,7 @@ public class Bank {
 			showAccountsPage(user);
 			break;
 		case "8":
-			
+			showDeleteUserPage(user);
 		case "9":
 			System.out.println("You have logged out.");
 			showLoginScreen();
@@ -319,7 +319,7 @@ public class Bank {
 			System.out.println("5. Withdrawal");
 			System.out.println("6. Transfer");
 			System.out.print("Choose an option: ");
-			String choice = scan.next();
+			String choice = scan.nextLine();
 			if (choice.equals("1")) {
 				choice = "Food";
 			}
@@ -359,6 +359,39 @@ public class Bank {
 		System.out.println("==============================================");
 		user.printAllAccountsInfo();
 		showHomepage(user);
+	}
+	
+	public void showDeleteUserPage(User user) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("");
+		System.out.println("==============================================");
+		System.out.println("                 Delete User                  ");
+		System.out.println("==============================================");
+		System.out.println("To delete your User, enter your password: ");
+		String password = scan.nextLine();
+		if (password.equals("")) {
+			System.out.println("Please enter a valid password.");
+			showDeleteUserPage(user);
+		}
+		else {
+			users.remove(findUserIndex(user));
+			System.out.println("User deleted.");
+			showLoginScreen();
+		}
+	}
+	
+	private int findUserIndex(User user) {
+		int index = 0;
+		for (int i = 0; i < users.size(); i++) {
+			User temp = users.get(i);
+			if (temp.getUsername().equals(user.getUsername())) {
+				if (temp.getPassword().equals(user.getPassword())) {
+					index = i;
+					break;
+				}
+			}
+		}
+		return index;
 	}
 	
 	//checks if username already exists
