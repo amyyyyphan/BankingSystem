@@ -16,11 +16,6 @@ public class User{
 		accounts = new ArrayList<Account>();
 	}
 	
-	//sets a new password
-	public void setPassword(String newPassword) {
-		this.password = newPassword;
-	}
-	
 	//returns the User's password
 	public String getPassword() {
 		return password;

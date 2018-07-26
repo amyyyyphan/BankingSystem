@@ -28,7 +28,7 @@ public class Bank {
 			showSignUpPage();
 		}
 		else if (choice.equals("2")) {
-			login();
+			loginPage();
 		}
 		else {
 			System.out.println("Please choose an option between 1 and 2.");
@@ -94,7 +94,6 @@ public class Bank {
 				return false;
 			}
 		}
-		
 		//name is valid if it contains an alphabetic character
 		boolean isValid = false;
 		for (int j = 0; j < name.length(); j++) {
@@ -107,7 +106,7 @@ public class Bank {
 	}
 	
 	//shows login page
-	public void login() {
+	public void loginPage() {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
 		System.out.println("==============================================");
@@ -120,7 +119,7 @@ public class Bank {
 		}
 		else if (username.contains(" ")) {
 			System.out.println("Invalid username.");
-			login();
+			loginPage();
 		}
 		else{
 			System.out.print("Enter your password: ");
@@ -137,7 +136,7 @@ public class Bank {
 					}
 				}
 				System.out.println("Username or password is incorrect.");
-				login();
+				loginPage();
 			}
 		}
 	}
@@ -251,15 +250,17 @@ public class Bank {
 			System.out.println("Invalid Account ID.");
 			deleteAnAccountPage(user);
 		}
-		int accID = scan.nextInt();
-		if (user.accountExistsUnderUser(accID)) {
-			user.removeAccount(accID);
-			System.out.println("Account successfully deleted.");
-		}
 		else {
-			System.out.println("Account does not exist.");
+			int accID = scan.nextInt();
+			if (user.accountExistsUnderUser(accID)) {
+				user.removeAccount(accID);
+				System.out.println("Account successfully deleted.");
+			}
+			else {
+				System.out.println("Account does not exist.");
+			}
+			showHomepage(user);
 		}
-		showHomepage(user);
 	}
 	
 	public void showTransferToAnotherAccountPage(User user) {
@@ -273,39 +274,46 @@ public class Bank {
 			System.out.println("Invalid amount.");
 			showTransferToAnotherAccountPage(user);
 		}
-		double amount = scan.nextDouble();
-		if (amount < 0) {
-			System.out.println("Invalid amount.");
-			showTransferToAnotherAccountPage(user);
-		}
-		System.out.print("Enter the ID of the account you would like to transfer money to: ");
-		if (!scan.hasNextInt()) {
-			System.out.println("Invalid Account ID.");
-			showTransferToAnotherAccountPage(user);
-		}
-		int recipientAccID = scan.nextInt();
-		if (accountExists(recipientAccID)) {
-			System.out.print("Enter the ID of the account you would like to withdraw the money from: ");
-			if (!scan.hasNextInt()) {
-				System.out.println("Invaid Account ID.");
+		else {
+			double amount = scan.nextDouble();
+			if (amount < 0) {
+				System.out.println("Invalid amount.");
 				showTransferToAnotherAccountPage(user);
 			}
-			int senderAccID = scan.nextInt();
-			if (user.accountExistsUnderUser(senderAccID)) {
-				user.spend(senderAccID, amount, "Transfer");
-				if (user.hasEnough(senderAccID, amount)) {
-					User recipient = findRecipient(recipientAccID);
-					recipient.receive(recipientAccID, amount);
-				}
+			System.out.print("Enter the ID of the account you would like to transfer money to: ");
+			if (!scan.hasNextInt()) {
+				System.out.println("Invalid Account ID.");
+				showTransferToAnotherAccountPage(user);
 			}
 			else {
-				System.out.println("Account does not exist.");
+				int recipientAccID = scan.nextInt();
+				if (accountExists(recipientAccID)) {
+					System.out.print("Enter the ID of the account you would like to withdraw the money from: ");
+					if (!scan.hasNextInt()) {
+						System.out.println("Invaid Account ID.");
+						showTransferToAnotherAccountPage(user);
+					}
+					int senderAccID = scan.nextInt();
+					if (user.accountExistsUnderUser(senderAccID)) {
+						if (user.hasEnough(senderAccID, amount)) {
+							user.spend(senderAccID, amount, "Transfer");
+							User recipient = findRecipient(recipientAccID);
+							recipient.receive(recipientAccID, amount);
+						}
+						else {
+							System.out.println("You do not have enough money.");
+						}
+					}
+					else {
+						System.out.println("Account does not exist.");
+					}
+				}
+				else {
+					System.out.println("Account does not exist.");
+				}
+				showHomepage(user);
 			}
 		}
-		else {
-			System.out.println("Account does not exist.");
-		}
-		showHomepage(user);
 	}
 	
 	//show Deposit Page
@@ -321,28 +329,30 @@ public class Bank {
 			System.out.println("Invalid Account ID.");
 			showDepositPage(user);
 		}
-		int accID = scan.nextInt();
-		if (user.accountExistsUnderUser(accID)) {
-			System.out.print("Enter the amount you would like to deposit: ");
-			if (!scan.hasNextDouble()) {
-				System.out.println("Invalid amount.");
-				showDepositPage(user);
-			}
-			else {
-				double amount = scan.nextDouble();
-				if (amount < 0) {
+		else {
+			int accID = scan.nextInt();
+			if (user.accountExistsUnderUser(accID)) {
+				System.out.print("Enter the amount you would like to deposit: ");
+				if (!scan.hasNextDouble()) {
 					System.out.println("Invalid amount.");
 					showDepositPage(user);
 				}
-				else{
-					user.depositToAccount(accID, amount);
+				else {
+					double amount = scan.nextDouble();
+					if (amount < 0) {
+						System.out.println("Invalid amount.");
+						showDepositPage(user);
+					}
+					else{
+						user.depositToAccount(accID, amount);
+					}
 				}
 			}
+			else {
+				System.out.println("Account does not exist.");
+			}
+			showHomepage(user);
 		}
-		else {
-			System.out.println("Account does not exist.");
-		}
-		showHomepage(user);
 	}
 	
 	//show Withdraw page
@@ -378,6 +388,7 @@ public class Bank {
 			System.out.println("6. Transfer");
 			System.out.print("Choose an option: ");
 			String choice = scan.next();
+			
 			if (choice.equals("1")) {
 				choice = "Food";
 			}
@@ -523,7 +534,7 @@ public class Bank {
 	}
 	
 	//checks if username already exists
-	public boolean usernameAlreadyExists(String username) {
+	private boolean usernameAlreadyExists(String username) {
 		boolean usernameExist = false;
 		for (int i = 0; i < users.size(); i++) {
 			if (users.get(i).getUsername().equals(username)) {
@@ -535,7 +546,7 @@ public class Bank {
 	}
 	
 	//checks if a Checkings/Savings account with the given ID exists
-	public boolean accountExists(int accID) {
+	private boolean accountExists(int accID) {
 		for (int i = 0; i < users.size(); i++) {
 			User user = users.get(i);
 			if (user.accountExistsUnderUser(accID)) {
@@ -546,12 +557,13 @@ public class Bank {
 	}
 	
 	//finds the User that has a Checkings/Savings account with the given ID
-	public User findRecipient(int accID) {
+	private User findRecipient(int accID) {
 		User recipient = null;
 		for (int i = 0; i < users.size(); i++) {
 			User user = users.get(i);
 			if (user.accountExistsUnderUser(accID)) {
 				recipient = user;
+				break;
 			}
 		}
 		return recipient;

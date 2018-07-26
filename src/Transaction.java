@@ -29,6 +29,11 @@ public class Transaction implements Comparable{
 		return amount;
 	}
 	
+	//return the transaction ID
+	public int getTransactionID() {
+		return transactionID;
+	}
+	
 	@Override
 	public int compareTo(Object o) {
 		LocalTime other = (LocalTime)o;
@@ -41,10 +46,5 @@ public class Transaction implements Comparable{
 		else {
 			return 0;
 		}
-	}
-	
-	//return the transaction ID
-	public int getTransactionID() {
-		return transactionID;
 	}
 }

@@ -1,8 +1,8 @@
 
 Account ID: 1
-Balance: 0.0
-Type: Savings
+Balance: 30.0
+Type: Checkings
 
                  Transactions                 
                 ==============                
-0  12:07:59.016  Deposit  10.0
+No transaction of this type.

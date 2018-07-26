@@ -70,7 +70,7 @@ public class Account{
 		System.out.println("                 Transactions                 ");
 		System.out.println("                ==============                ");
 		if (transactions.size() == 0) {
-			System.out.println("No tranactions.");
+			System.out.println("No transactions.");
 		}
 		for (int i = 0; i < transactions.size(); i++) {
 			Transaction transaction = transactions.get(i);
@@ -113,13 +113,18 @@ public class Account{
 		System.out.println("                 Transactions                 ");
 		System.out.println("                ==============                ");
 		if (transactions.size() == 0) {
-			System.out.println("No tranactions.");
+			System.out.println("No transactions.");
 		}
+		boolean hasType = false;
 		for (int i = 0; i < transactions.size(); i++) {
 			Transaction transaction = transactions.get(i);
 			if (transaction.getType().equals(type)) {
 				System.out.println(transaction.getTransactionID() + "  " + transaction.getTime() + "  " + transaction.getType() + "  " + transaction.getAmount());
+				hasType = true;
 			}
+		}
+		if (!hasType) {
+			System.out.println("No transaction of this type.");
 		}
 		
 		try {
@@ -144,6 +149,9 @@ public class Account{
 				if (transaction.getType().equals(type)) {
 					writer.println(transaction.getTransactionID() + "  " + transaction.getTime() + "  " + transaction.getType() + "  " + transaction.getAmount());
 				}
+			}
+			if (!hasType) {
+				writer.println("No transaction of this type.");
 			}
 			writer.close();
 		}
