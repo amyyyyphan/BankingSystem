@@ -119,6 +119,11 @@ public class User{
 		}
 	}
 	
+	public void printAccountInfo(int accID) {
+		int accIndex = getAccountIndex(accID);
+		Account account = accounts.get(accIndex);
+	}
+	
 	public void receive(int accID, double amount) {
 		int index = getAccountIndex(accID);
 		Account account = accounts.get(index);

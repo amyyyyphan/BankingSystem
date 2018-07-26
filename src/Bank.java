@@ -145,9 +145,10 @@ public class Bank {
 			showWithdrawPage(user);
 			break;
 		case "6":
-			
+			showAccountPage(user);
+			break;
 		case "7":
-			showAccountsPage(user);
+			showAllAccountsPage(user);
 			break;
 		case "8":
 			showDeleteUserPage(user);
@@ -350,8 +351,33 @@ public class Bank {
 		showHomepage(user);
 	}
 	
+	public void showAccountPage(User user) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("");
+		System.out.println("==============================================");
+		System.out.println("                   Account                    ");
+		System.out.println("==============================================");
+		System.out.print("Enter the ID of the account you would like to check: ");
+		if (!scan.hasNextInt()) {
+			System.out.println("Invalid Account ID.");
+			showAccountPage(user);
+		}
+		else if(scan.hasNextLine()) {
+			if (scan.nextLine().contains(" ")) {
+				System.out.println("Invalid Account ID.");
+				showAccountPage(user);
+			}
+		}
+		else {
+			int accID = scan.nextInt();
+			if (user.accountExistsUnderUser(accID)) {
+				user.printAccountInfo(accID);
+			}
+		}
+	}
+	
 	//show Accounts page
-	public void showAccountsPage(User user) {
+	public void showAllAccountsPage(User user) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("");
 		System.out.println("==============================================");
@@ -367,7 +393,7 @@ public class Bank {
 		System.out.println("==============================================");
 		System.out.println("                 Delete User                  ");
 		System.out.println("==============================================");
-		System.out.println("To delete your User, enter your password: ");
+		System.out.print("To delete your User, enter your password: ");
 		String password = scan.nextLine();
 		if (password.equals("")) {
 			System.out.println("Please enter a valid password.");

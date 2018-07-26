@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.time.LocalTime;
 
-public class Account implements Comparable{
+public class Account{
 	
 	private int accID;
 	private double balance;
@@ -59,19 +59,5 @@ public class Account implements Comparable{
 	
 	public String getAccType() {
 		return accType;
-	}
-	
-	@Override
-	public int compareTo(Object o) {
-		Account account = (Account)o;
-		if (account.getBalance() > this.balance) {
-			return -1;
-		}
-		else if (account.getBalance() < this.balance) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
 	}
 }
